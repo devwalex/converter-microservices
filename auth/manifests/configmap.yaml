@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-configmap
+data:
+  DB_NAME: converter
+  DB_USER: root
+  DB_PORT: "3306"
