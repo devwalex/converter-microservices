@@ -1,0 +1,16 @@
+{
+  "name": "converter",
+  "version": "1.0.0",
+  "description": "converter service",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Usman Salami",
+  "license": "MIT",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "mongoose": "^7.0.1",
+    "multer-gridfs-storage": "^5.0.2"
+  }
+}
