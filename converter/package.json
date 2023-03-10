@@ -2,8 +2,9 @@
   "name": "converter",
   "version": "1.0.0",
   "description": "converter service",
-  "main": "server.js",
+  "main": "consumer.js",
   "scripts": {
+    "start": "node consumer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Usman Salami",
