@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "amqplib": "^0.10.3",
+    "dotenv": "^16.0.3",
     "mongoose": "^7.0.1",
     "multer-gridfs-storage": "^5.0.2"
   }

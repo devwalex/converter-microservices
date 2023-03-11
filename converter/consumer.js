@@ -3,16 +3,17 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const amqplib = require("amqplib");
 const fs = require("fs");
 const { exec } = require("child_process");
+require("dotenv/config");
 
 let videoBucket, audioBucket;
 // video mongo connection
-const videoConnection = mongoose.createConnection("mongodb://localhost:27017/videos");
+const videoConnection = mongoose.createConnection(process.env.MONGO_VIDEO_URL);
 videoConnection.once("open", () => {
   videoBucket = new mongoose.mongo.GridFSBucket(videoConnection);
 });
 
 // audio mongo connection
-const audioConnection = mongoose.createConnection("mongodb://localhost:27017/audios");
+const audioConnection = mongoose.createConnection(process.env.MONGO_AUDIO_URL);
 audioConnection.once("open", () => {
   audioBucket = new mongoose.mongo.GridFSBucket(audioConnection);
 });
@@ -21,7 +22,7 @@ const audioStorage = new GridFsStorage({ db: videoConnection });
 (async () => {
   const queue = "videos";
 
-  const conn = await amqplib.connect("amqp://localhost");
+  const conn = await amqplib.connect(process.env.RABBITMQ_HOST);
   const channel = await conn.createChannel();
   await channel.assertQueue(queue, { durable: true });
 
