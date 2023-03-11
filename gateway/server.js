@@ -9,7 +9,7 @@ const router = express.Router();
 const { register, login, validate } = require("./services/auth");
 
 let bucket;
-const connection = mongoose.createConnection("mongodb://127.0.0.1:27017/videos");
+const connection = mongoose.createConnection(process.env.MONGO_VIDEO_URL);
 connection.once("open", () => {
   bucket = new mongoose.mongo.GridFSBucket(connection);
 });
@@ -64,7 +64,7 @@ router.post("/upload", upload, async (req, res) => {
       const stringifyMessage = JSON.stringify(message);
 
       const queue = "videos";
-      const conn = await amqplib.connect("amqp://localhost");
+      const conn = await amqplib.connect(process.env.RABBITMQ_HOST);
       const channel = await conn.createChannel();
       await channel.assertQueue(queue, { durable: true });
       channel.sendToQueue(queue, Buffer.from(stringifyMessage), { persistent: true });
