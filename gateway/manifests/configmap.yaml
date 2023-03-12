@@ -5,5 +5,6 @@ metadata:
 data:
   AUTH_SVC_ADDRESS: "http://auth:4000"
   MONGO_VIDEO_URL: "mongodb://host.minikube.internal:27017/videos"
+  MONGO_AUDIO_URL: "mongodb://host.minikube.internal:27017/audios"
   RABBITMQ_HOST: "amqp://rabbitmq"
 

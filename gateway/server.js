@@ -8,13 +8,16 @@ const app = express();
 const router = express.Router();
 const { register, login, validate } = require("./services/auth");
 
-let bucket;
-const connection = mongoose.createConnection(process.env.MONGO_VIDEO_URL);
-connection.once("open", () => {
-  bucket = new mongoose.mongo.GridFSBucket(connection);
-});
-const videoStorage = new GridFsStorage({ db: connection });
+const videoConnection = mongoose.createConnection(process.env.MONGO_VIDEO_URL);
+const videoStorage = new GridFsStorage({ db: videoConnection });
 const upload = multer({ storage: videoStorage }).single("video");
+
+// audio mongo connection
+let bucket;
+const audioConnection = mongoose.createConnection(process.env.MONGO_AUDIO_URL);
+audioConnection.once("open", () => {
+  bucket = new mongoose.mongo.GridFSBucket(audioConnection);
+});
 
 // parse json request body
 app.use(express.json());
@@ -81,6 +84,30 @@ router.post("/upload", upload, async (req, res) => {
     } else {
       return res.status(500).send(error);
     }
+  }
+});
+
+router.get("/download/:audioFileId", async (req, res) => {
+  try {
+    const audioFileId = req.params.audioFileId;
+    if (audioFileId && audioFileId.length != 24) {
+      return res.status(404).send("File not found.");
+    }
+    const _id = new mongoose.Types.ObjectId(audioFileId);
+    const cursor = bucket.find({ _id });
+    const filesMetadata = await cursor.toArray();
+    if (!filesMetadata.length) {
+      return res.status(404).send("File not found.");
+    }
+    res.set({
+      "Accept-Ranges": "bytes",
+      "Content-Disposition": `attachment; filename=${audioFileId}.mp3`,
+      "Content-Type": "audio/mpeg",
+    });
+    bucket.openDownloadStream(_id).pipe(res);
+  } catch (error) {
+    console.log("Download Error =>", error);
+    return res.status(500).send(error);
   }
 });
 
