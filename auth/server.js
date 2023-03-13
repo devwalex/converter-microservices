@@ -12,10 +12,6 @@ app.use(express.json());
 
 app.use(router);
 
-router.get("/", (req, res) => {
-  res.status(200).send("OK");
-});
-
 router.post("/register", async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body;
