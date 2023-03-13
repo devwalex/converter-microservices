@@ -56,6 +56,9 @@ router.post("/upload", upload, async (req, res) => {
   try {
     const response = await validate(req);
     if (response.data) {
+      if (req.file.mimetype !== "video/mp4") {
+        return res.status(400).send("Only mp4 file is allowed");
+      }
       const videoFileId = req.file.id;
       const message = {
         videoFileId: videoFileId.toString(),
