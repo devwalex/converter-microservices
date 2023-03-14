@@ -97,11 +97,13 @@ Here is an overview of the microservices architecture:
     ```
 9.  Access the gateway and rabbitmq manager URL from your machine
 
-    http://videotoaudio.com/
+    http://videotoaudio.com
 
-    http://rabbitmq-manager.com/ (username - guest, password - guest)
+    http://rabbitmq-manager.com (username - guest, password - guest)
 
+10. API documentation
 
+    https://documenter.getpostman.com/view/5916628/2s93JuuigU
 
 ## Author
 Usman Salami
