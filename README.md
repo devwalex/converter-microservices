@@ -36,6 +36,73 @@ Here is an overview of the microservices architecture:
 - Next, the converter services send a message to the audios queue.
 - Finally, the notification services receive the message from the audios queue and notify the user with a download link for the audio file.
 
+
+## General setup
+
+1. Prerequisites    
+    Make sure you have the following installed on your machine
+    - nodejs
+    - kubectl
+    - minikube
+    - docker
+    - mongodb
+    - mysql
+
+2. Clone the repo
+
+    ```
+    git clone https://github.com/devwalex/converter-microservices
+    ```
+
+3. Set up environment variables for each service
+
+    ```
+    cp .env.example .env
+    ```
+4. Run migration for auth service
+
+    ```
+    cd auth
+    npm run migrate
+    ```
+5. Start minikube and minikube tunnel
+    ```
+    minikube start
+    minikube tunnel
+    ```
+6. Start all the services
+    ```
+    kubectl apply -f ./auth/manifests
+    kubectl apply -f ./gateway/manifests
+    kubectl apply -f ./converter/manifests
+    kubectl apply -f ./notificaton/manifests
+    kubectl apply -f ./rabbitmq/manifests
+    ```
+7.  Add the gateway and rabbitmq manager domain to your etc/hosts file
+
+    ```js
+        127.0.0.1 videotoaudio.com
+        127.0.0.1 rabbitmq-manager.com
+    ```
+    Add these 👆 lines of code to your /etc/hosts file.
+
+    ```
+    nano /etc/hosts
+    ```
+    This will enable you to access the domain locally on your browser.
+
+8.  Check if all the service is created
+    ```
+    kubectl get services
+    ```
+9.  Access the gateway and rabbitmq manager URL from your machine
+
+    http://videotoaudio.com/
+
+    http://rabbitmq-manager.com/ (username - guest, password - guest)
+
+
+
 ## Author
 Usman Salami
 
